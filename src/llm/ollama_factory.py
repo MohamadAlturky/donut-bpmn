@@ -4,9 +4,6 @@ from langchain_community.llms import Ollama
 from dotenv import load_dotenv
 from settings import env
 
-"""
-    Returns llm instance. 
-"""
 class OllamaFactory(LLMFactory):
     def __init__(self):
         load_dotenv(override=True)
@@ -14,9 +11,8 @@ class OllamaFactory(LLMFactory):
         self.model_name = os.getenv(env.LLAMA3_MODEL_NAME)
     
     def create(self, model_name : str = None):
+        print(model_name)
         if model_name is None:
             return Ollama(model=self.model_name, base_url=self.host)
         else:
             return Ollama(model=model_name, base_url=self.host)
-
-
