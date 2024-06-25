@@ -11,7 +11,6 @@ class OllamaFactory(LLMFactory):
         self.model_name = os.getenv(env.LLAMA3_MODEL_NAME)
     
     def create(self, model_name : str = None):
-        print(model_name)
         if model_name is None:
             return Ollama(model=self.model_name, base_url=self.host)
         else:
