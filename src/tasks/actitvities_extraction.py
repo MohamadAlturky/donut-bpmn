@@ -6,7 +6,7 @@ from tasks.base_task import BaseTask
 class ActivityList(BaseModel):
     activities: list[str]
 
-class ActivitySentences(BaseModel):
+class ActivitySentence(BaseModel):
     sentence: str
 
 
@@ -75,7 +75,7 @@ class ActivityExtractionMarker(BaseTask):
             expected_output=(
                 "the sentences where the activity appeared"
             ),
-            output_json=ActivitySentences,
+            output_json=ActivitySentence,
             agent=marker,
         )
         self.crew = Crew(
