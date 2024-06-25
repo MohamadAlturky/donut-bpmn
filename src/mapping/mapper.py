@@ -34,7 +34,22 @@ class Mapper():
         )
         self.mapping_type = binding_type
 
+    # def map(self, response, schema_descriptor):
+    #     res = self.crew.kickoff(inputs={"text":response,"json_descriptor":schema_descriptor})
+    #     # result = self.mapping_type(**res)
+    #     return json.loads(json.dumps(res), object_hook=self.mapping_type)
+    
     def map(self, response, schema_descriptor):
         res = self.crew.kickoff(inputs={"text":response,"json_descriptor":schema_descriptor})
-        result : self.mapping_type = json.loads(res, object_hook=lambda d: self.mapping_type(**d))
-        return result
+        # result = self.mapping_type(**res)
+        # return json.loads(json.dumps(res), object_hook=self.mapping_type)
+        return obj(res)
+    
+    
+class obj(object):
+    def __init__(self, d):
+        for k, v in d.items():
+            if isinstance(k, (list, tuple)):
+                setattr(self, k, [obj(x) if isinstance(x, dict) else x for x in v])
+            else:
+                setattr(self, k, obj(v) if isinstance(v, dict) else v)
