@@ -5,6 +5,7 @@ from core.design.task import LLMTask
 from core.design.config import TaskConfig
 from mapping.model.config import MapperConfig
 from models.process_description.model import ProcessDescription
+from models.relations.model import ActivityRelationShipsList
 from utils.ollama_factory import OllamaFactory
 from dotenv import load_dotenv
 from settings import env
@@ -69,6 +70,30 @@ def create_process_description_simplification_extraction_task():
 
     mapper_config = MapperConfig(schema_descriptor="a ProcessDescription object has content",
                                 binding_type=ProcessDescription,
+                                llm_factory=OllamaFactory(),
+                                model_name="codegemma")
+
+
+    extraction_instance = LLMTask(task_config=task_config,
+                                        mapper_config=mapper_config)
+    
+    return extraction_instance
+
+
+
+
+def create_activities_relationships_extraction_task():
+
+    task_config = TaskConfig(llm_factory=OllamaFactory(),
+                                tasks_folder_path=tasks_folder_path,
+                                output_type=ActivityRelationShipsList,
+                                model_name="llama3",
+                                task_name="\\Activities Relationships\\extract.json",
+                                mapping_error_tolerance=2,
+                                generating_error_tolerance=2)
+
+    mapper_config = MapperConfig(schema_descriptor="an ActivityRelationShipsList object contains a list of NextActivity which contains activity and condition",
+                                binding_type=ActivityRelationShipsList,
                                 llm_factory=OllamaFactory(),
                                 model_name="codegemma")
 
