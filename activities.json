@@ -1,8 +1,0 @@
-[
-  {
-    "activity": "Deliver Items",
-    "condition": null
-  }
-]
-
-These activities are subsequent to the activity "Return Item for Exchange" and meet the criteria specified in the task.
