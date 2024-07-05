@@ -1,4 +1,5 @@
 import os
+from models.activities.model import Activities
 from models.pools_and_swimlanes.model import Pools
 from core.design.task import LLMTask
 from core.design.config import TaskConfig
@@ -26,3 +27,24 @@ pools_and_swimlanes_mapper_config = MapperConfig(schema_descriptor="a Pools obje
 
 pools_and_swimlanes_extraction = LLMTask(task_config=pools_and_swimlanes_task_config,
                                     mapper_config=pools_and_swimlanes_mapper_config)
+
+
+
+
+
+activities_from_pools_and_swimlanes_task_config = TaskConfig(llm_factory=OllamaFactory(),
+                            tasks_folder_path=tasks_folder_path,
+                            output_type=Activities,
+                            model_name="llama3",
+                            task_name="\\Activities from Pools\\extract.json",
+                            mapping_error_tolerance=2,
+                            generating_error_tolerance=2)
+
+activities_from_pools_and_swimlanes_mapper_config = MapperConfig(schema_descriptor="an Activities object has a list of Activity each Activity has name, pool and swimlane",
+                            binding_type=Activities,
+                            llm_factory=OllamaFactory(),
+                            model_name="codegemma")
+
+
+activities_from_pools_and_swimlanes_extraction = LLMTask(task_config=activities_from_pools_and_swimlanes_task_config,
+                                    mapper_config=activities_from_pools_and_swimlanes_mapper_config)
