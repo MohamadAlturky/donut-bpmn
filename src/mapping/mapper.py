@@ -1,19 +1,24 @@
-import json
 from crewai import Agent, Task, Crew
-from typing import TypeVar
-from llm.ollama_factory import OllamaFactory
-
+from mapping.model.obj import Obj
+from mapping.model.config import MapperConfig
 class Mapper():
-    def __init__(self,binding_type:TypeVar):
-        ollamaFactory = OllamaFactory()
-        codegemma = ollamaFactory.create("codegemma")
+    def __init__(self, config:MapperConfig):
+        
+        self.schema_descriptor = config.schema_descriptor
+        self.mapping_type = config.binding_type
+        
+        if config.model_name is None:
+            llm = config.llm_factory.create("codegemma")
+        else:
+            llm = config.llm_factory.create(config.model_name)
+            
         mapper = Agent(
             role="json formating expert",
             goal="Your objective is to extract a json object from the provided text {text}",
             backstory="You're working to convert text containing data to json format with this format {json_descriptor}",
             allow_delegation=False,
             verbose=True,
-            llm = codegemma
+            llm = llm
         )
 
         mapping = Task(
@@ -24,7 +29,7 @@ class Mapper():
             expected_output=(
                 "json format representing the text."
             ),
-            output_json=binding_type,
+            output_json=config.binding_type,
             agent=mapper,
         )
         self.crew = Crew(
@@ -32,24 +37,8 @@ class Mapper():
             tasks=[mapping],
             verbose=2
         )
-        self.mapping_type = binding_type
 
-    # def map(self, response, schema_descriptor):
-    #     res = self.crew.kickoff(inputs={"text":response,"json_descriptor":schema_descriptor})
-    #     # result = self.mapping_type(**res)
-    #     return json.loads(json.dumps(res), object_hook=self.mapping_type)
-    
-    def map(self, response, schema_descriptor):
-        res = self.crew.kickoff(inputs={"text":response,"json_descriptor":schema_descriptor})
-        # result = self.mapping_type(**res)
-        # return json.loads(json.dumps(res), object_hook=self.mapping_type)
-        return obj(res)
-    
-    
-class obj(object):
-    def __init__(self, d):
-        for k, v in d.items():
-            if isinstance(k, (list, tuple)):
-                setattr(self, k, [obj(x) if isinstance(x, dict) else x for x in v])
-            else:
-                setattr(self, k, obj(v) if isinstance(v, dict) else v)
+    def map(self, response):
+        res = self.crew.kickoff(inputs={"text":response,"json_descriptor":self.schema_descriptor})
+        obj = Obj(res)
+        return obj
