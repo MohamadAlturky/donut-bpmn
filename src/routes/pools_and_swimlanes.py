@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
-from services.tasks import pools_and_swimlanes_extraction
+from services.tasks import create_activities_from_pools_and_swimlanes_extraction_task as task_creator
 router = APIRouter(
     prefix="/pools_and_swimlanes"
 )
@@ -10,7 +10,7 @@ class ExtractPoolsAndSwimlanesRequest(BaseModel):
 
 @router.post("/extract")
 def extract_pools_and_swimlanes(request:ExtractPoolsAndSwimlanesRequest):
-    result = pools_and_swimlanes_extraction.evaluate(inputs={
+    result = task_creator().evaluate(inputs={
         "process_description":request.process_description
     })
     return result

@@ -1,9 +1,11 @@
 from fastapi import FastAPI
 from routes.pools_and_swimlanes import router as pools_and_swimlanes_router
+from routes.activities_from_pools_and_swimlanes import router as activities_from_pools_and_swimlanes
 from fastapi.responses import HTMLResponse
 app = FastAPI(swagger_ui_parameters={"syntaxHighlight.theme": "obsidian"})
 
 app.include_router(pools_and_swimlanes_router)
+app.include_router(activities_from_pools_and_swimlanes)
 
 @app.get("/")
 def index():
