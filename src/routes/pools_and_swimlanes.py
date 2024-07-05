@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
-from services.tasks import create_activities_from_pools_and_swimlanes_extraction_task as task_creator
+from services.tasks import create_pools_and_swimlanes_extraction_task as task_creator
 router = APIRouter(
     prefix="/pools_and_swimlanes"
 )
