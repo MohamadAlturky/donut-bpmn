@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 class NextActivity(BaseModel):
-    activity: str
+    name: str
     condition: str
 
 class ActivityRelationShipsList(BaseModel):

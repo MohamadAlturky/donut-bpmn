@@ -6,8 +6,16 @@ class InitialState(IState):
         self.task = task
         
     def evaluate(self, input):
+        # generated = self.task.executor.kickoff(input)
+        
         try:
+            print("********************************")
             generated = self.task.executor.kickoff(input)
+            print("********************************")
+            print("********************************")
+            print(generated)
+            print("********************************")
+            print("********************************")
         except:
             self.task.state = self.task.GENERATING_ERROR_STATE
             return None
@@ -30,6 +38,7 @@ class MappingErrorState(IState):
         
     def evaluate(self, input):
         self.error_count = self.error_count + 1
+        print(f"Begins MappingErrorState with errors {self.error_count}")
 
         if self.error_count > self.task.mapping_error_tolerance:
             self.error_count = 0
@@ -54,7 +63,8 @@ class GeneratingErrorState(IState):
         
     def evaluate(self, input):
         self.error_count = self.error_count + 1
-
+        print(f"Begins GeneratingErrorState with errors {self.error_count}")
+        
         if self.error_count > self.task.generating_error_tolerance:
             self.task.state = self.task.FAILURE_STATE
             return None

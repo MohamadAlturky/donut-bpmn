@@ -89,10 +89,10 @@ def create_activities_relationships_extraction_task():
                                 output_type=ActivityRelationShipsList,
                                 model_name="llama3",
                                 task_name="\\Activities Relationships\\extract.json",
-                                mapping_error_tolerance=2,
-                                generating_error_tolerance=2)
+                                mapping_error_tolerance=0,
+                                generating_error_tolerance=0)
 
-    mapper_config = MapperConfig(schema_descriptor="an ActivityRelationShipsList object contains a list of NextActivity which contains activity and condition",
+    mapper_config = MapperConfig(schema_descriptor="an object contains a list of NextActivity named next_activities which contains each NextActivity contains name and condition if there is a null convert it to empty string",
                                 binding_type=ActivityRelationShipsList,
                                 llm_factory=OllamaFactory(),
                                 model_name="codegemma")

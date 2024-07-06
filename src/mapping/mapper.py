@@ -40,5 +40,10 @@ class Mapper():
 
     def map(self, response):
         res = self.crew.kickoff(inputs={"text":response,"json_descriptor":self.schema_descriptor})
+        print("-----------------------------")
+        print("-----------------------------")
+        print(res)
+        print("-----------------------------")
+        print("-----------------------------")
         obj = Obj(res)
         return obj
